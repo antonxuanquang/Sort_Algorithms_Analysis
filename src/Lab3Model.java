@@ -73,11 +73,6 @@ public class Lab3Model {
 		
 		heapSort(sortArray, sortArray.length - 1);
 		
-//		System.out.println("# of comparison: " + comparisonCount);
-//		System.out.println("# of swap: " + swapCount);
-		for (String item: sortArray) {
-			System.out.println(item);
-		}
 	}
 
 	private void heapSort(String[] array, int length) {
@@ -116,16 +111,64 @@ public class Lab3Model {
 		comparisonCount = 0;
 		swapCount = 0;
 		
+		mergeSort(sortArray, 0, sortArray.length - 1);
+		printOut(sortArray);
 	}
 
 	
 	
+	private void mergeSort(String[] sortArray, int min, int max) {
+		if (min < max) {
+			int mid = (min + max) / 2;
+			mergeSort(sortArray, min, mid);
+			mergeSort(sortArray, mid + 1, max);
+			merge(sortArray, min, mid, max);
+		}
+		
+	}
+
+	private void merge(String[] array, int first, int mid, int last) {
+		String [] temp = new String[array.length];
+		
+		int first1 = first, last1 = mid;
+		int first2 = mid + 1, last2 = last;
+		int index = first1;
+		
+		while (first1 <= last1 && first2 <= last2) {
+			System.out.println(first1 + " " + first2);
+	
+			if (array[first1].compareTo(array[first2]) < 0) {
+				temp[index] = array[first1];
+				first1++;
+			} else {
+				temp[index] = array[first2];
+				first2++;
+			}
+			index++;
+		}
+		while (first1 <= last1) {
+			temp[index] = array[first1];
+			first1++;
+			index++;
+		}
+		while (first2 <= last2) {
+			temp[index] = array[first2];
+			first2++;
+			index++;
+		}
+		
+		for (index = first; index <= last; index++) {
+			array[index] = temp[index];
+		}
+	}
+
 	public void startQuickSort(String[] array, int number) {
 		String [] sortArray = Arrays.copyOfRange(array, 0, number);
 		comparisonCount = 0;
 		swapCount = 0;
 
 		quickSort(sortArray, 0, sortArray.length - 1);
+		printOut(sortArray);
 	}
 	
 	private void quickSort(String[] array, int left, int right) {
@@ -135,7 +178,7 @@ public class Lab3Model {
 			String temp = array[left];
 			
 
-			while (i<j) {
+			while (i < j) {
 				i = i + 1;
 				comparisonCount++;
 				while (i <= right && (array[i].compareTo(temp) < 0)) {
@@ -148,9 +191,15 @@ public class Lab3Model {
 					comparisonCount++;
 					j = j - 1;
 				}
-				array[i] = array[j];
+				if (i <= right) {
+					swap(array, i, j);
+					swapCount = swapCount + 3;
+				}
 			}
-			swap(array, i, j);
+			if (i <= right) {
+				swap(array, i, j);
+				swapCount = swapCount + 3;
+			}
 			swapCount = swapCount + 3;
 			swap(array, j, left);
 			swapCount = swapCount + 3;
@@ -163,5 +212,17 @@ public class Lab3Model {
 		String temp = array[j];
 		array[j] = array[i];
 		array[i] = temp;
+	}
+	
+	private void printOut(String [] sortArray) {
+		for (String item: sortArray) {
+			System.out.print(item + "\t");
+		}
+		System.out.println();
+	}
+	
+	private void printOutCount() {
+		System.out.println("# of comparison: " + comparisonCount);
+		System.out.println("# of swap: " + swapCount);
 	}
 }
