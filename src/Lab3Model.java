@@ -12,7 +12,7 @@ import Theme.QRadioButton;
 public class Lab3Model {
 
 	String [] ascendingArray, descendingArray, randomArray, temp;
-	int swapCount, comparisonCount;
+	int moveCount, comparisonCount;
 	
 	
 	
@@ -48,7 +48,10 @@ public class Lab3Model {
 	}
 	
 
-	
+	/**
+	 * Use JFileChooser to get data file
+	 * @return a file that user selected, null if did not select any file 
+	 */
 	private File getFile() {
 		JFileChooser fc = new JFileChooser("C:\\Users\\Quang Nguyen\\OneDrive"
 				+ "\\mon hoc\\Fall 2015\\CoSc 20803\\Sort_Algorithms_Analysis");
@@ -60,63 +63,92 @@ public class Lab3Model {
 		}
 	}
 	
+	/**
+	 * Copy a number of keys in an array in order to do sorting on it
+	 * @param array the array from which keys are copied
+	 * @param number number of keys about to copy
+	 * @return a portion of the input array
+	 */
 	public String[] copy(String [] array, int number) {
 		String[] result = Arrays.copyOfRange(array, 0, number);
 		System.out.println(result.length);
 		return result;
 	}
 
+	
+
+	/**
+	 * Invoke heap Sort
+	 * @param array unsorted array/ input array
+	 * @param number number of keys about to sort in the input array
+	 */
 	public void startHeapSort(String[] array, int number) {
 		String [] sortArray = Arrays.copyOfRange(array, 0, number);
 		comparisonCount = 0;
-		swapCount = 0;
+		moveCount = 0;
 		
 		heapSort(sortArray, sortArray.length - 1);
-		
 	}
-
+	
+	/**
+	 * Heap Sort
+	 * @param array unsorted array
+	 * @param length length of input array
+	 */
 	private void heapSort(String[] array, int length) {
 		for (int i = (length/2); i >= 0; i--) {
 			heapify(array, i, length);
 		}
 		for (int i = (length-1); i >= 0; i--) {
 			swap(array, 1, i+1);
+			moveCount = moveCount + 3;
 			heapify(array, 1, i);
 		}
 	}
-
+	
+	/**
+	 * Rearrange data in heap fashion
+	 */
 	private void heapify(String[] array, int i, int length) {
 		boolean notFinished = true;
 		String temp = array[i];
+		moveCount++;
 		int j = 2*i;
 		while ((j <= length) && notFinished) {
 			if (j < length) {
+				comparisonCount++;
 				if (array[j].compareTo(array[j+1]) < 0) {
 					j++;
 				}
 			}
+			comparisonCount++;
 			if (temp.compareTo(array[j]) >= 0) {
 				notFinished = false;
 			} else {
+				
 				array[j/2] = array[j];
+				moveCount++;
 				j = 2*j;
 			}
 		}
 		array[j/2] = temp;
+		moveCount++;
 	}
 
 	
+	/**
+	 * Invoke merge sort
+	 * @param array 
+	 * @param number
+	 */
 	public void startMergeSort(String[] array, int number) {
 		String [] sortArray = Arrays.copyOfRange(array, 0, number);
 		comparisonCount = 0;
-		swapCount = 0;
+		moveCount = 0;
 		
 		mergeSort(sortArray, 0, sortArray.length - 1);
-		printOut(sortArray);
 	}
 
-	
-	
 	private void mergeSort(String[] sortArray, int min, int max) {
 		if (min < max) {
 			int mid = (min + max) / 2;
@@ -135,8 +167,8 @@ public class Lab3Model {
 		int index = first1;
 		
 		while (first1 <= last1 && first2 <= last2) {
-			System.out.println(first1 + " " + first2);
-	
+			comparisonCount++;
+			moveCount++;
 			if (array[first1].compareTo(array[first2]) < 0) {
 				temp[index] = array[first1];
 				first1++;
@@ -148,27 +180,37 @@ public class Lab3Model {
 		}
 		while (first1 <= last1) {
 			temp[index] = array[first1];
+			moveCount++;
 			first1++;
 			index++;
 		}
 		while (first2 <= last2) {
 			temp[index] = array[first2];
+			moveCount++;
 			first2++;
 			index++;
 		}
 		
 		for (index = first; index <= last; index++) {
 			array[index] = temp[index];
+			moveCount++;
 		}
 	}
 
+	
+
+	
+	/**
+	 * Invoke quick sort
+	 * @param array
+	 * @param number
+	 */
 	public void startQuickSort(String[] array, int number) {
 		String [] sortArray = Arrays.copyOfRange(array, 0, number);
 		comparisonCount = 0;
-		swapCount = 0;
+		moveCount = 0;
 
 		quickSort(sortArray, 0, sortArray.length - 1);
-		printOut(sortArray);
 	}
 	
 	private void quickSort(String[] array, int left, int right) {
@@ -176,33 +218,40 @@ public class Lab3Model {
 			int i = left;
 			int j = right + 1;
 			String temp = array[left];
-			
+			moveCount++;
 
 			while (i < j) {
 				i = i + 1;
-				comparisonCount++;
-				while (i <= right && (array[i].compareTo(temp) < 0)) {
+				if (i <= right && (array[i].compareTo(temp) < 0)) {
+					while (i <= right && (array[i].compareTo(temp) < 0)) {
+						comparisonCount++;
+						i = i + 1;
+					}
+				} else {
 					comparisonCount++;
-					i = i + 1;
 				}
+				
 				j = j - 1;
-				comparisonCount++;
-				while (j >= left && (array[j].compareTo(temp)) > 0) {
+				if (j >= left && (array[j].compareTo(temp)) > 0) {
+					while (j >= left && (array[j].compareTo(temp)) > 0) {
+						comparisonCount++;
+						j = j - 1;
+					}
+				} else {
 					comparisonCount++;
-					j = j - 1;
 				}
+				
 				if (i <= right) {
 					swap(array, i, j);
-					swapCount = swapCount + 3;
+					moveCount = moveCount + 3;
 				}
 			}
 			if (i <= right) {
 				swap(array, i, j);
-				swapCount = swapCount + 3;
+				moveCount = moveCount + 3;
 			}
-			swapCount = swapCount + 3;
 			swap(array, j, left);
-			swapCount = swapCount + 3;
+			moveCount = moveCount + 3;
 			quickSort(array, left, j - 1);
 			quickSort(array, j + 1, right);
 		}
@@ -214,6 +263,13 @@ public class Lab3Model {
 		array[i] = temp;
 	}
 	
+	
+
+	
+	/**
+	 * Print out to the console items in a array
+	 * @param sortArray
+	 */
 	private void printOut(String [] sortArray) {
 		for (String item: sortArray) {
 			System.out.print(item + "\t");
@@ -221,8 +277,11 @@ public class Lab3Model {
 		System.out.println();
 	}
 	
+	/**
+	 * Print out to the console number of comparisons and data movements
+	 */
 	private void printOutCount() {
-		System.out.println("# of comparison: " + comparisonCount);
-		System.out.println("# of swap: " + swapCount);
+		System.out.println(comparisonCount + " - # of comparison");
+		System.out.println(moveCount + " - # of move");
 	}
 }

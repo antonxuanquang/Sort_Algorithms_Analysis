@@ -25,6 +25,10 @@ public class Lab3Control implements ActionListener{
 		setUpListeners();
 	}
 	
+	
+	/**
+	 * This method is the starting point after user clicks Sort button
+	 */
 	private void sort() {
 		String sortType = getSelectedButtonText(view.groupSort);
 		String dataFile = getSelectedButtonText(view.groupFile);
@@ -53,13 +57,19 @@ public class Lab3Control implements ActionListener{
 				case "Quick Sort": model.startQuickSort(array,number); break;
 				default: break;
 			}
+			view.tfComparisons.setText("" + model.comparisonCount);
+			view.tfSwaps.setText("" + model.moveCount);
 		}
 	}
 
+	/**
+	 * Get the value of selected JRadioButton
+	 * @param buttonGroup group of JRadioButton
+	 * @return value of the selected JRadioButton in its group
+	 */
 	public String getSelectedButtonText(ButtonGroup buttonGroup) {
         for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements();) {
             AbstractButton button = buttons.nextElement();
-
             if (button.isSelected()) {
                 return button.getText();
             }
@@ -68,6 +78,9 @@ public class Lab3Control implements ActionListener{
     }
 	
 	
+	/**
+	 * Invoke loadFile method in Model
+	 */
 	private void loadFile() {
 		if (!view.rdbtnAscending.isEnabled()) {
 			model.loadFile(view.rdbtnAscending, model.ascendingArray);
@@ -83,7 +96,9 @@ public class Lab3Control implements ActionListener{
 	
 	
 	
-
+	/**
+	 * Set up listeners for buttons.
+	 */
 	private void setUpListeners() {
 		view.btnLoadDataFiles.addActionListener(this);
 		view.btnSort.addActionListener(this);

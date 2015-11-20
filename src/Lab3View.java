@@ -1,3 +1,12 @@
+/**
+ * This program is meant to analyze different sorting algorithms,
+ * by counting the number of comparisons (only count comparison between
+ * data) and the number of data movement in a particular sorting
+ * algorithm.
+ * 
+ * Author: Quang Nguyen
+ * 
+ */
 import java.awt.BorderLayout;
 import net.miginfocom.swing.MigLayout;
 import java.awt.event.ActionListener;
@@ -13,7 +22,11 @@ import java.awt.event.ActionEvent;
 import javax.swing.ButtonGroup;
 
 public class Lab3View extends JFrame{
-	
+	/**
+	 * This class is the starting point of the program. The main 
+	 * function of this class is to create a view. It also initiates
+	 * its view's controller and program's model. 
+	 */
 	Lab3Model model;
 	Lab3Control control;
 	
